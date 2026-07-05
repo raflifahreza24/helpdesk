@@ -132,6 +132,20 @@
                <span class="menu-text"> Priorities </span>
             </a>
          </li>
+
+         <li class="side-nav-item mt-2">
+            <a href="apps-email.html" class="side-nav-link">
+               <span class="menu-icon"><i class="ti ti-history"></i></span>
+               <span class="menu-text"> Activity Logs </span>
+            </a>
+         </li>
+
+         <li class="side-nav-item">
+            <a href="apps-email.html" class="side-nav-link">
+               <span class="menu-icon"><i class="ti ti-logout"></i></span>
+               <span class="menu-text"> Logout </span>
+            </a>
+         </li>
       </ul>
 
       <div class="clearfix"></div>
