@@ -10,6 +10,9 @@
       <!-- App favicon -->
       <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+      <!-- gridjs css -->
+      <link rel="stylesheet" href="{{ asset('assets/vendor/gridjs/theme/mermaid.min.css') }}">
+
       <!-- Theme Config Js -->
       <script src="{{ asset('assets/js/config.js') }}"></script>
 
@@ -309,10 +312,10 @@
       <!-- App js -->
       <script src="{{ asset('assets/js/app.js') }}"></script>
 
-      <!-- Apex Chart js -->
-      <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+      <!-- Vendor grid js -->
+      <script src="{{ asset('assets/vendor/gridjs/gridjs.umd.js') }}"></script>
+      {{-- <script src="{{ asset('assets/js/pages/table-gridjs.js') }}"></script> --}}
 
-      <!-- Projects Analytics Dashboard App js -->
-      <script src="{{ asset('assets/js/pages/dashboard-sales.js') }}"></script>
+      @stack('script')
    </body>
 </html>
