@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
    protected $guarded = ['id'];
+
+   public static function datatable()
+   {
+      return self::select([
+         'id',
+         'name',
+         'label'
+      ])
+         ->get();
+   }
 }
