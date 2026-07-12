@@ -113,7 +113,7 @@
          <li class="side-nav-title mt-2">Master Data</li>
          
          <li class="side-nav-item">
-            <a href="apps-chat.html" class="side-nav-link">
+            <a href="{{ route('master.departement.index') }}" class="side-nav-link">
                <span class="menu-icon"><i class="ti ti-building"></i></span>
                <span class="menu-text"> Departements </span>
             </a>

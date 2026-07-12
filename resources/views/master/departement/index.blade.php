@@ -33,7 +33,7 @@
             <div class="col-lg-12">
                <div class="card">
                   <div class="card-header border-bottom border-dashed">
-                     <h4 class="header-title">Search</h4>
+                     <h4 class="header-title">All Department</h4>
                   </div><!-- end card header -->
 
                   <div class="card-body">
@@ -144,19 +144,40 @@
                   },
                   columns: [
                      {
-                        name: gridjs.html('<div class="text-start w-100">Name</div>'),
-                        width: '150px',
+                        name: 'Name',
+                        width: '250px',
+                        formatter: function(e) {
+                           return gridjs.html(
+                              '<div class="text-start">' + e + '</div>'
+                           );
+                        },
                      },
                      {
-                        name: gridjs.html('<div class="text-start w-100">Label</div>'),
+                        name: 'Description',
+                        formatter: function(e) {
+                           return gridjs.html(
+                              '<div class="text-start">' + e + '</div>'
+                           );
+                        },
+                     },
+                     {
+                        name: 'Status',
                         width: '150px',
+                        sort: false,
+                        formatter: function(e) {
+                           return gridjs.html(
+                              '<div class="text-center">' + e + '</div>'
+                           );
+                        },
                      },
                      {
                         name: 'Action',
-                        width: '40px',
+                        width: '150px',
                         sort: false,
                         formatter: function(e) {
-                           return gridjs.html('<div class="text-center">' + e + '</div>');
+                           return gridjs.html(
+                              '<div class="text-center">' + e + '</div>'
+                           );
                         },
                      },
                   ],
@@ -167,7 +188,8 @@
                   data: filterRoleRows().map(function(row) {
                      return [
                         row.name,
-                        row.label,
+                        row.description,
+                        row.status,
                         row.action
                      ];
                   }),
@@ -182,7 +204,7 @@
                renderGridjsTable(Number(gridjsLimit.value));
             });
 
-            fetch("{{ route('admin.role.datatable') }}")
+            fetch("{{ route('master.departement.datatable') }}")
                .then(function(response) {
                   return response.json();
                })

@@ -24,6 +24,15 @@
 
       <!-- Icons css -->
       <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+
+      <style>
+         #role-gridjs-table .gridjs-th,
+#role-gridjs-table .gridjs-td {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+      </style>
    </head>
 
    <body>
@@ -32,6 +41,8 @@
          {{ $slot }}
       </div>
       <!-- END wrapper -->
+
+      @stack('modal')
 
       <!-- Theme Settings -->
       <div class="offcanvas offcanvas-end" tabindex="-1" id="theme-settings-offcanvas">
