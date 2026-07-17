@@ -15,7 +15,7 @@
                      <form action="javascript:void(0);">
                         <div class="row g-2 mb-0 align-items-center">
                            <div class="col-auto">
-                              <button type="button" class="btn btn-soft-dark" data-bs-toggle="modal" data-bs-target="#standard-modal"> 
+                              <button type="button" class="btn btn-soft-dark" data-bs-toggle="modal" data-bs-target="#modal-create"> 
                                  <iconify-icon icon="solar:add-circle-bold-duotone" class="fs-18 align-middle me-1"></iconify-icon>
                                  <span>Create</span>
                               </button>
@@ -50,31 +50,86 @@
    </div>
 
    @push('modal')
-      <!-- Standard modal content -->
-      <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h4 class="modal-title" id="standard-modalLabel">Modal Heading</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
+      <!-- Create Modal -->
+      <div id="modal-create" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h4 class="modal-title" id="standard-modalLabel">Create Departement</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <form action="#" method="post" id="form-create-departement">
                   <div class="modal-body">
-                      <h5>Text in a modal</h5>
-                      <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-                      <hr>
-                      <h5>Overflowing text to show scroll behavior</h5>
-                      <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                      <p class="mb-0">Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                     <div class="row">
+                        <div class="col-12">
+                           <div class="mb-2">
+                              <label for="crt-name" class="form-label">
+                                 Name <span class="text-danger">*</span>
+                              </label>
+                              <input type="text" name="crt_name" id="crt-name" class="form-control">
+                           </div>
+                           
+                           <div class="mb-2">
+                              <label for="crt-description" class="form-label">Description</label>
+                              <textarea class="form-control" id="crt-description" name="crt_description" rows="3"></textarea>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                   <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Save changes</button>
                   </div>
-              </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
+               </form>
+            </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
       </div>
-      <!-- /.modal -->
+      <!-- End Create Modal -->
+
+      <!-- Edit Modal -->
+      <div id="modal-edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h4 class="modal-title" id="standard-modalLabel">Edit Departement</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <form action="#" method="post" id="form-update-departement">
+                  <input type="hidden" name="edt_id" id="edt-id">
+                  <div class="modal-body">
+                     <div class="row">
+                        <div class="col-12">
+                           <div class="mb-2">
+                              <label for="edt-name" class="form-label">
+                                 Name <span class="text-danger">*</span>
+                              </label>
+                              <input type="text" name="edt_name" id="edt-name" class="form-control">
+                           </div>
+                           
+                           <div class="mb-2">
+                              <label for="edt-description" class="form-label">Description</label>
+                              <textarea class="form-control" id="edt-description" name="edt_description" rows="3"></textarea>
+                           </div>
+
+                           <div class="mb-2">
+                              <label for="edt-aktif" class="form-label">Status Aktif</label>
+                              <select class="form-control" name="edt_aktif" id="edt-aktif">
+                                 <option value="1">Active</option>
+                                 <option value="0">Inactive</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+               </form>
+            </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+      </div>
+      <!-- End Edit Modal -->
    @endpush
 
    @push('script')
@@ -91,6 +146,72 @@
                });
             }
          });
+
+         const csrfToken = @json(csrf_token());
+         const createModalElement = document.getElementById('modal-create');
+         const editModalElement = document.getElementById('modal-edit');
+         const createModal = bootstrap.Modal.getOrCreateInstance(createModalElement);
+         const editModal = bootstrap.Modal.getOrCreateInstance(editModalElement);
+
+         function clearValidation(formSelector) {
+            const form = $(formSelector);
+
+            form.find('.is-invalid').removeClass('is-invalid');
+            form.find('.invalid-feedback').remove();
+         }
+
+         function showValidationErrors(formSelector, errors) {
+            clearValidation(formSelector);
+
+            Object.keys(errors).forEach(function(field) {
+               const input = $(formSelector).find('[name="' + field + '"]');
+
+               if (!input.length) {
+                  return;
+               }
+
+               input.addClass('is-invalid');
+               $('<div>', {
+                  class: 'invalid-feedback',
+                  text: errors[field][0]
+               }).insertAfter(input);
+            });
+         }
+
+         function showSuccessAlert(message) {
+            Swal.fire({
+               text: message,
+               icon: 'success',
+               buttonsStyling: false,
+               confirmButtonText: 'Ok, got it!',
+               customClass: {
+                  confirmButton: 'btn btn-success'
+               }
+            });
+         }
+
+         function showErrorAlert(message) {
+            Swal.fire({
+               text: message,
+               icon: 'error',
+               buttonsStyling: false,
+               confirmButtonText: 'Ok, got it!',
+               customClass: {
+                  confirmButton: 'btn btn-danger'
+               }
+            });
+         }
+
+         function resetCreateForm() {
+            $('#form-create-departement')[0].reset();
+            clearValidation('#form-create-departement');
+         }
+
+         function resetUpdateForm() {
+            $('#form-update-departement')[0].reset();
+            $('#edt-id').val('');
+            clearValidation('#form-update-departement');
+         }
 
          function initializeDatatable() {
             const tableGridjs = document.getElementById('table-gridjs');
@@ -124,7 +245,8 @@
                return roleRows.filter(function(row) {
                   return [
                      row.name,
-                     row.label
+                     row.description,
+                     row.status
                   ].join(' ').toLowerCase().includes(keyword);
                });
             }
@@ -213,6 +335,185 @@
                   renderGridjsTable(Number(gridjsLimit.value));
                });
          }
+
+         // Edit
+         $(document).on('click', '.btn-edit', function() {
+            const id = $(this).data('id');
+
+            clearValidation('#form-update-departement');
+
+            $.ajax({
+               url: "{{ url('master/departement/edit') }}/" + id,
+               method: 'GET',
+               dataType: 'json',
+               success: function(response) {
+                  const departement = response.data;
+
+                  $('#edt-id').val(departement.id);
+                  $('#edt-name').val(departement.name);
+                  $('#edt-description').val(departement.description);
+                  $('#edt-aktif').val(Number(departement.is_active) === 1 ? '1' : '0');
+
+                  editModal.show();
+               },
+               error: function(xhr) {
+                  const message = xhr.responseJSON && xhr.responseJSON.message
+                     ? xhr.responseJSON.message
+                     : 'Failed to get department data.';
+
+                  showErrorAlert(message);
+               }
+            });
+         });
+
+         // Create
+         $('#form-create-departement').on('submit', function(event) {
+            event.preventDefault();
+
+            const form = $(this);
+            const submitButton = form.find('button[type="submit"]');
+
+            clearValidation('#form-create-departement');
+            submitButton.prop('disabled', true);
+
+            $.ajax({
+               url: "{{ route('master.departement.create') }}",
+               method: 'POST',
+               data: form.serialize(),
+               dataType: 'json',
+               headers: {
+                  'X-CSRF-TOKEN': csrfToken
+               },
+               success: function(response) {
+                  createModal.hide();
+                  resetCreateForm();
+                  initializeDatatable();
+                  showSuccessAlert(response.message || 'Department created successfully.');
+               },
+               error: function(xhr) {
+                  if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                     showValidationErrors('#form-create-departement', xhr.responseJSON.errors);
+                     return;
+                  }
+
+                  const message = xhr.responseJSON && xhr.responseJSON.message
+                     ? xhr.responseJSON.message
+                     : 'Failed to create department.';
+
+                  showErrorAlert(message);
+               },
+               complete: function() {
+                  submitButton.prop('disabled', false);
+               }
+            });
+         });
+
+         // Update
+         $('#form-update-departement').on('submit', function(event) {
+            event.preventDefault();
+
+            const form = $(this);
+            const submitButton = form.find('button[type="submit"]');
+
+            clearValidation('#form-update-departement');
+            submitButton.prop('disabled', true);
+
+            $.ajax({
+               url: "{{ route('master.departement.update') }}",
+               method: 'POST',
+               data: form.serialize(),
+               dataType: 'json',
+               headers: {
+                  'X-CSRF-TOKEN': csrfToken
+               },
+               success: function(response) {
+                  editModal.hide();
+                  resetUpdateForm();
+                  initializeDatatable();
+                  showSuccessAlert(response.message || 'Department updated successfully.');
+               },
+               error: function(xhr) {
+                  if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                     showValidationErrors('#form-update-departement', xhr.responseJSON.errors);
+                     return;
+                  }
+
+                  const message = xhr.responseJSON && xhr.responseJSON.message
+                     ? xhr.responseJSON.message
+                     : 'Failed to update department.';
+
+                  showErrorAlert(message);
+               },
+               complete: function() {
+                  submitButton.prop('disabled', false);
+               }
+            });
+         });
+
+         $('#modal-create').on('hidden.bs.modal', function() {
+            resetCreateForm();
+         });
+
+         $('#modal-edit').on('hidden.bs.modal', function() {
+            resetUpdateForm();
+         });
+
+         // Delete
+         $(document).on('click', '.btn-delete', function() {
+            const id = $(this).data('id');
+
+            Swal.fire({
+               title: 'Delete Department',
+               text: 'Are you sure you want to delete this department?',
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonText: 'Yes, delete it',
+               cancelButtonText: 'Cancel',
+               buttonsStyling: false,
+               customClass: {
+                  confirmButton: 'btn btn-danger me-2 mt-2',
+                  cancelButton: 'btn btn-secondary mt-2'
+               }
+            }).then(function(result) {
+               if (!(result.isConfirmed || result.value)) {
+                  return;
+               }
+
+               Swal.fire({
+                  title: 'Deleting...',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  showConfirmButton: false,
+                  didOpen: function() {
+                     Swal.showLoading();
+                  }
+               });
+
+               $.ajax({
+                  url: "{{ route('master.departement.delete') }}",
+                  method: 'POST',
+                  data: {
+                     id: id
+                  },
+                  dataType: 'json',
+                  headers: {
+                     'X-CSRF-TOKEN': csrfToken
+                  },
+                  success: function(response) {
+                     initializeDatatable();
+                     showSuccessAlert(response.message || 'Department deleted successfully.');
+                  },
+                  error: function(xhr) {
+                     const message = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'Failed to delete department.';
+
+                     showErrorAlert(message);
+                  }
+               });
+            });
+         });
+
       </script>
    @endpush
 </x-layout>

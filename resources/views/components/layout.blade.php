@@ -13,6 +13,9 @@
       <!-- gridjs css -->
       <link rel="stylesheet" href="{{ asset('assets/vendor/gridjs/theme/mermaid.min.css') }}">
 
+      <!-- Sweet Alert css-->
+      <link href="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
       <!-- Theme Config Js -->
       <script src="{{ asset('assets/js/config.js') }}"></script>
 
@@ -27,11 +30,11 @@
 
       <style>
          #role-gridjs-table .gridjs-th,
-#role-gridjs-table .gridjs-td {
-   overflow: hidden;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-}
+         #role-gridjs-table .gridjs-td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+         }
       </style>
    </head>
 
@@ -327,6 +330,49 @@
       <script src="{{ asset('assets/vendor/gridjs/gridjs.umd.js') }}"></script>
       {{-- <script src="{{ asset('assets/js/pages/table-gridjs.js') }}"></script> --}}
 
+      <!-- Sweet Alerts js -->
+      <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+
       @stack('script')
+
+      <!-- Logout -->
+      <script>
+         const logoutButton = document.getElementById('logout-button');
+
+         if (logoutButton) {
+            logoutButton.addEventListener('click', function (event) {
+               event.preventDefault();
+
+               Swal.fire({
+                  title: 'Sign Out',
+                  text: 'Are you sure you want to sign out?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  buttonsStyling: false,
+                  customClass: {
+                     confirmButton: 'btn btn-primary me-2 mt-2',
+                     cancelButton: 'btn btn-danger mt-2'
+                  }
+               }).then(function (result) {
+                  if (result.value) {
+                     const logoutForm = document.createElement('form');
+                     logoutForm.method = 'POST';
+                     logoutForm.action = logoutButton.getAttribute('href');
+
+                     const csrfInput = document.createElement('input');
+                     csrfInput.type = 'hidden';
+                     csrfInput.name = '_token';
+                     csrfInput.value = @json(csrf_token());
+
+                     logoutForm.appendChild(csrfInput);
+                     document.body.appendChild(logoutForm);
+                     logoutForm.submit();
+                  }
+               });
+            });
+         }
+      </script>
    </body>
 </html>
