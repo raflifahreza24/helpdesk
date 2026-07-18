@@ -120,7 +120,7 @@
          </li>
 
          <li class="side-nav-item">
-            <a href="apps-calendar.html" class="side-nav-link">
+            <a href="{{ route('master.category.index') }}" class="side-nav-link">
                <span class="menu-icon"><i class="ti ti-category"></i></span>
                <span class="menu-text"> Categories </span>
             </a>
